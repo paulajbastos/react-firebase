@@ -5,6 +5,15 @@ import './styles/main.scss';
 
 class Main extends Component {
 
+  constructor(props) {
+    super(props);
+    /*
+    this.state = {
+
+    }
+    */
+  }
+
   componentWillMount() {
 
     var config = {
@@ -20,10 +29,42 @@ class Main extends Component {
 
   }
 
+  listData() {
+
+    var marcas = firebase.database().ref("marcas");
+
+    //Adicionando listener -> https://firebase.google.com/docs/database/web/lists-of-data
+    marcas.on('value', (snapshot) => {
+      alert(snapshot.val());
+    });
+
+
+  }
+
+
   saveData() {
-    console.log('saveData');
-    var database = firebase.database();
-    database.ref("pontuacao").set("100");
+    var marcas = firebase.database().ref("marcas");
+
+    //Gera estaticamente o nó
+    //marcas.child('001').child('nome').set('Liquidação');
+
+    //Gera dinamicamente um identificador unico para cada nó
+    //marcas.push().child('nome').set('Liquidação');
+
+    //Criando com objetos literais
+
+    marcas.push().set(
+      {
+        nome: 'Liquidaçao',
+        url: 'https://www.usereserva.com/usereserva/home',
+        title: 'Liquidaçao',
+        marca: 'reserva',
+        categoryid: '254898A1278946E325F84904BC6922C8'
+      }
+    )
+
+
+
   }
 
   render() {
@@ -43,6 +84,10 @@ class Main extends Component {
                 <button
                 onClick={()=> this.saveData()}
                 >Add Item</button>
+
+                <button
+                onClick={()=> this.listData()}
+                >Mostrar</button>
 
           </section>
           <section className='display-item'>
